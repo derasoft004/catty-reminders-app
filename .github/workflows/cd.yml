@@ -18,10 +18,11 @@ jobs:
           script: |
             echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u derasoft004 --password-stdin
             
-            docker stop catty-production || true
-            docker rm catty-production || true
+            sudo fuser -k 8181/tcp 2>/dev/null || true
+            docker stop $(docker ps -q) 2>/dev/null || true
+            docker rm $(docker ps -aq) 2>/dev/null || true
             
             docker pull ghcr.io/derasoft004/catty-app-test:latest
-            
             docker run -d -p 8181:8181 --name catty-production ghcr.io/derasoft004/catty-app-test:latest
+            
             
