@@ -1,4 +1,4 @@
-name: CD 
+name: CD
 
 on:
   release:
@@ -8,21 +8,20 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Pull Docker image
-        run: |
-          echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker pull ghcr.io/derasoft004/catty-app-test:latest
-      
       - name: Deploy via SSH
-        uses: easingthemes/ssh-deploy@v2.2.11
+        uses: appleboy/ssh-action@v1  # ← ПРАВИЛЬНЫЙ ACTION!
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: course.prafdin.ru
-          REMOTE_PORT: 2200
-          REMOTE_USER: kali
-          SCRIPT: |
+          host: course.prafdin.ru
+          port: 2200
+          username: kali
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
             echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u derasoft004 --password-stdin
+            
             docker stop catty-production || true
             docker rm catty-production || true
+            
             docker pull ghcr.io/derasoft004/catty-app-test:latest
+            
             docker run -d -p 8181:8181 --name catty-production ghcr.io/derasoft004/catty-app-test:latest
+            
