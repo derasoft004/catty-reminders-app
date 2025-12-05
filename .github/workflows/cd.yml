@@ -20,7 +20,7 @@ jobs:
             echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u derasoft004 --password-stdin
             
             cd ~/Desktop/catty-reminders-app
-            echo "DATABASE_URL=postgresql://catty:cattypass@db:5432/cattydb" > .env
+            echo "DATABASE_URL=postgresql://1:1@db:5432/cattydb" > .env
             echo "DEBUG=false" >> .env
             
             docker pull ghcr.io/derasoft004/catty-app-test:latest
