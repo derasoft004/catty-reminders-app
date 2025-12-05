@@ -1,0 +1,42 @@
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: catty-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cattydb
+      POSTGRES_USER: catty
+      POSTGRES_PASSWORD: 1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - catty-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U catty"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: ghcr.io/derasoft004/catty-app-test:latest
+    container_name: catty-app
+    restart: unless-stopped
+    ports:
+      - "8181:8181"
+    environment:
+      DATABASE_URL: postgresql://catty:1@db:5432/cattydb
+      DEBUG: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - catty-network
+
+networks:
+  catty-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
