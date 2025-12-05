@@ -24,7 +24,7 @@ services:
     ports:
       - "8181:8181"
     environment:
-      DATABASE_URL: postgresql://catty:1@db:5432/cattydb
+      DATABASE_URL: postgresql://1:1@db:5432/cattydb
       DEBUG: "false"
     depends_on:
       db:
