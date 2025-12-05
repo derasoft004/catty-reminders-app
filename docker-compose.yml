@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_DB: cattydb
-      POSTGRES_USER: catty
+      POSTGRES_USER: 1
       POSTGRES_PASSWORD: 1
     volumes:
       - postgres_data:/var/lib/postgresql/data
