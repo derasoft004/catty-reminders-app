@@ -2,9 +2,9 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ github-actions, docker-lab ]
+    branches: [ github-actions, docker-lab , docker-compose-lab]
   pull_request:
-    branches: [ github-actions, docker-lab ]
+    branches: [ github-actions, docker-lab, docker-compose-lab]
 
 jobs:
   test:
